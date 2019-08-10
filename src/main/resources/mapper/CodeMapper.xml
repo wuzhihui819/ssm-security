@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huanong.lab.dao.CodeMapper">
+  <resultMap id="BaseResultMap" type="com.huanong.lab.bean.Code">
+    <id column="code_id" jdbcType="INTEGER" property="codeId" />
+    <result column="realcode" jdbcType="VARCHAR" property="realcode" />
+    <result column="counter" jdbcType="INTEGER" property="counter" />
+    <result column="firsttime" jdbcType="TIMESTAMP" property="firsttime" />
+    <result column="p_id" jdbcType="INTEGER" property="pId" />
+  </resultMap>
+  <resultMap id="WithProductResultMap" type="com.huanong.lab.bean.Code">
+    <id column="code_id" jdbcType="INTEGER" property="codeId" />
+    <result column="realcode" jdbcType="VARCHAR" property="realcode" />
+    <result column="counter" jdbcType="INTEGER" property="counter" />
+    <result column="firsttime" jdbcType="TIMESTAMP" property="firsttime" />
+    <result column="p_id" jdbcType="INTEGER" property="pId" />
+    <association property="product" javaType="com.huanong.lab.bean.Product">
+     	<id column="product_id" property="productId" />
+    	<result column="product_name" property="productName" />
+    	<result column="presentation" property="presentation" />
+    </association> 
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    code_id, realcode, counter, firsttime, p_id
+  </sql>
+  <sql id="WithProduct_Column_List">
+    code_id, realcode, counter, firsttime, p_id ,product_id ,product_name ,presentation
+  </sql>
+  <select id="selectByExampleWithProduct" parameterType="com.huanong.lab.bean.CodeExample" resultMap="WithProductResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="WithProduct_Column_List" />
+    from codes_tbl
+    left join products_tbl on codes_tbl.p_Id=products_tbl.product_id
+    where code_id = #{codeId,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="orderByClause == null">
+        order by codes_tbl.p_Id
+    </if>
+  </select>
+  
+  <select id="selectByPrimaryKeyWithProduct" parameterType="java.lang.Integer" resultMap="WithProductResultMap">
+    select 
+    <include refid="WithProduct_Column_List" />
+    from codes_tbl
+    left join products_tbl on codes_tbl.p_Id=products_tbl.product_id
+    where code_id = #{codeId,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectByExample" parameterType="com.huanong.lab.bean.CodeExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from codes_tbl
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from codes_tbl
+    where code_id = #{codeId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from codes_tbl
+    where code_id = #{codeId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.huanong.lab.bean.CodeExample">
+    delete from codes_tbl
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.huanong.lab.bean.Code">
+    insert into codes_tbl (code_id, realcode, counter, 
+      firsttime, p_id)
+    values (#{codeId,jdbcType=INTEGER}, #{realcode,jdbcType=VARCHAR}, #{counter,jdbcType=INTEGER}, 
+      #{firsttime,jdbcType=TIMESTAMP}, #{pId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.huanong.lab.bean.Code">
+    insert into codes_tbl
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="codeId != null">
+        code_id,
+      </if>
+      <if test="realcode != null">
+        realcode,
+      </if>
+      <if test="counter != null">
+        counter,
+      </if>
+      <if test="firsttime != null">
+        firsttime,
+      </if>
+      <if test="pId != null">
+        p_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="codeId != null">
+        #{codeId,jdbcType=INTEGER},
+      </if>
+      <if test="realcode != null">
+        #{realcode,jdbcType=VARCHAR},
+      </if>
+      <if test="counter != null">
+        #{counter,jdbcType=INTEGER},
+      </if>
+      <if test="firsttime != null">
+        #{firsttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="pId != null">
+        #{pId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.huanong.lab.bean.CodeExample" resultType="java.lang.Long">
+    select count(*) from codes_tbl
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update codes_tbl
+    <set>
+      <if test="record.codeId != null">
+        code_id = #{record.codeId,jdbcType=INTEGER},
+      </if>
+      <if test="record.realcode != null">
+        realcode = #{record.realcode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.counter != null">
+        counter = #{record.counter,jdbcType=INTEGER},
+      </if>
+      <if test="record.firsttime != null">
+        firsttime = #{record.firsttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.pId != null">
+        p_id = #{record.pId,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update codes_tbl
+    set code_id = #{record.codeId,jdbcType=INTEGER},
+      realcode = #{record.realcode,jdbcType=VARCHAR},
+      counter = #{record.counter,jdbcType=INTEGER},
+      firsttime = #{record.firsttime,jdbcType=TIMESTAMP},
+      p_id = #{record.pId,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.huanong.lab.bean.Code">
+    update codes_tbl
+    <set>
+      <if test="realcode != null">
+        realcode = #{realcode,jdbcType=VARCHAR},
+      </if>
+      <if test="counter != null">
+        counter = #{counter,jdbcType=INTEGER},
+      </if>
+      <if test="firsttime != null">
+        firsttime = #{firsttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="pId != null">
+        p_id = #{pId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where code_id = #{codeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.huanong.lab.bean.Code">
+    update codes_tbl
+    set realcode = #{realcode,jdbcType=VARCHAR},
+      counter = #{counter,jdbcType=INTEGER},
+      firsttime = #{firsttime,jdbcType=TIMESTAMP},
+      p_id = #{pId,jdbcType=INTEGER}
+    where code_id = #{codeId,jdbcType=INTEGER}
+  </update>
+</mapper>
