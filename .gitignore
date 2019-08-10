@@ -1,0 +1,15 @@
+# Created by .ignore support plugin (hsz.mobi)
+### Example user template template
+### Example user template
+
+# IntelliJ project files
+.idea
+*.iml
+out
+gen
+.gitignore
+src/resources/mapper/
+target/generated-sources/
+target/ssm-security/WEB-INF/classes/mapper/
+target/ssm-security/WEB-INF/classes/org/lanqiu/service/Impl/
+target/ssm-security/WEB-INF/views/
