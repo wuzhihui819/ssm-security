@@ -54,6 +54,9 @@ public class Security {
 
 
     public String getDay() {
+        if(day==null){
+            return  null;
+        }
         DateFormat df4 = DateFormat.getDateTimeInstance();
         String format = df4.format(day);
         return format;
